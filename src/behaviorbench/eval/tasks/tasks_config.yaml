@@ -1,0 +1,233 @@
+# BehaviorBench task configuration.
+#
+# Output types:
+#   numeric      single float
+#   integer      single integer
+#   multi_choice multiple-choice answer such as A/B/C/D
+#   text         free text
+#   push_pull    Push/Pull action, parsed as Push=0 and Pull=1
+#
+# Metrics:
+#   MAE / MAE_with_normalization: individual numeric error
+#   Accuracy / accuracy_multi_choice: categorical accuracy
+#   Spearman_with_pvalue: rank correlation
+#   Wasserstein_with_ks: distributional alignment
+#   win_rate: Beauty Contest strategic win rate
+#   BLEURT / ROUGE-1: workflow generation quality
+
+tasks:
+  # Big Five survey response prediction and subject-trait inference.
+  demo_pred_age:
+    metrics: [MAE, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+
+  pers_score_pred:
+    metrics: [MAE, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [10, 50]
+    group_by: bigfive_dimension
+
+  acrossdim_pers_score:
+    metrics: [MAE, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [10, 50]
+    group_by: bigfive_dimension
+
+  surv_resp_pred:
+    metrics: [Accuracy, f1_macro, MAE, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: integer
+    clip_range: [1, 5]
+    group_by: target_item
+    expected_groups: 50
+
+  missing_surv_resp:
+    metrics: [Accuracy, f1_macro, MAE, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: integer
+    clip_range: [1, 5]
+    group_by: target_item
+    expected_groups: 50
+
+  seq_surv_resp:
+    metrics: [Accuracy, f1_macro, MAE, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: integer
+    clip_range: [1, 5]
+    group_by: target_item
+    expected_groups: 49
+
+  # Behavioral knowledge application.
+  ieo_economics:
+    metrics: [accuracy_multi_choice, f1_macro]
+    output_type: multi_choice
+
+  research_workflow:
+    metrics: [BLEURT, ROUGE-1]
+    output_type: text
+    group_by: journal
+    group_averaging: micro
+    expected_groups: 2
+
+  # First-round economic-game behavior simulation.
+  game_behavior_dictator:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  game_behavior_ultimatum_proposer:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  game_behavior_ultimatum_responder:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  game_behavior_trust_investor:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  game_behavior_trust_banker:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 150]
+    normalize_range: [0, 100]
+
+  game_behavior_public_goods:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 20]
+    normalize_range: [0, 100]
+
+  game_behavior_bomb:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  game_behavior_guessing:
+    metrics: [Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  game_behavior_push_pull:
+    metrics: [Wasserstein_with_ks]
+    output_type: push_pull
+    clip_range: [0, 1]
+    normalize_range: [0, 100]
+
+  # Multi-round economic-game behavior prediction.
+  multiround_behavior_dictator:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  multiround_behavior_trust_investor:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  multiround_behavior_trust_banker_inv50:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 150]
+    normalize_range: [0, 100]
+
+  multiround_behavior_trust_banker_inv100:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 300]
+    normalize_range: [0, 100]
+
+  multiround_behavior_public_goods:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 20]
+    normalize_range: [0, 100]
+
+  multiround_behavior_bomb:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  multiround_behavior_guessing:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  multiround_behavior_push_pull:
+    metrics: [MAE_with_normalization, Accuracy, f1_macro, Wasserstein_with_ks]
+    output_type: push_pull
+    clip_range: [0, 1]
+    normalize_range: [0, 100]
+
+  # Across-context economic-game behavior prediction.
+  acrossgame_behavior_dictator:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_ultimatum_proposer:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_ultimatum_responder:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_trust_investor:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_trust_banker:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 150]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_public_goods:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 20]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_bomb:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_guessing:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
+
+  acrossgame_behavior_push_pull:
+    metrics: [MAE_with_normalization, Accuracy, f1_macro, Wasserstein_with_ks]
+    output_type: push_pull
+    clip_range: [0, 1]
+    normalize_range: [0, 100]
+
+  # Strategic decision-making against human Beauty Contest sessions.
+  strategic_gameplay_guessing:
+    metrics: [MAE_with_normalization, Spearman_with_pvalue, Wasserstein_with_ks, win_rate]
+    output_type: numeric
+    clip_range: [0, 100]
+    normalize_range: [0, 100]
